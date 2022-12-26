@@ -36,7 +36,9 @@ export function getNodeOutputConnections(node, graph) {
  * @returns {Array} Array of Connection models.
  */
 export function getNodeConnections(node, graph) {
-  
+    return Object
+        .values(graph.connections)
+        .filter(connection => connection.sourcePath === node.id || connection.targetPath === node.id)
 }
 
 /**
