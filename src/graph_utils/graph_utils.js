@@ -77,5 +77,8 @@ export function getRootNodes(graph) {
  * @returns {Boolean} True if a node has different source paths.
  */
 export function hasMultipleSources(node, graph) {
-  
+    return Object
+        .values(graph.connections)
+        .filter(connection => connection.targetPath === node.id)
+        .length > 1
 }
