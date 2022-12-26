@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useChatActions } from "../../hooks";
 
+/**
+ * ChatNewMessageForm: Container to display a form to create a new message
+ * @component
+ * @returns {JSX.Element}
+ */
 export const ChatNewMessageForm = () => {
     const [input, setInput] = useState('');
     const { sendMessage } = useChatActions()

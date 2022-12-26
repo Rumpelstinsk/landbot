@@ -5,6 +5,11 @@ import { ChatMessage } from "./ChatMessage"
 
 const MESSAGE_CONTAINER_ID = 'landbot-messages-container'
 
+/**
+ * ChatMessageList: Container for displaying user messages
+ * @component
+ * @returns {JSX.Element}
+ */
 export const ChatMessageList = () => {
   const messages = useChat()
 
