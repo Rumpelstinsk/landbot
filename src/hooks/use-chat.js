@@ -1,10 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-
-/** Landbot client to work with the API */
-var core = new window.Landbot.Core({
-    firebase: window.firebase,
-    configUrl: 'https://chats.landbot.io/u/H-441480-B0Q96FP58V53BJ2J/index.json',
-});
+import { LandbotClient } from "../wrappers";
 
 /**
  * ChatMessage
@@ -25,14 +20,14 @@ export const useChat = () => {
     const [messages, setMessages] = useState({});
 
     useEffect(() => {
-        core.pipelines.$readableSequence.subscribe((data) => {
+        LandbotClient.onNewMessages((data) => {
           setMessages((messages) => ({
             ...messages,
             [data.key]: parseMessage(data),
           }));
         });
     
-        core.init().then((data) => {
+        LandbotClient.onInit((data) => {
           setMessages(parseMessages(data.messages));
         });
       }, []);
@@ -46,7 +41,7 @@ export const useChat = () => {
 
 /**
  * @callback SendMessage
- * @property {ChatMessage} message - Message to be sent
+ * @property {String} message - Message to be sent
  * @returns {void}
  */
 /**
@@ -60,18 +55,10 @@ export const useChat = () => {
  * @returns {UseChatActionsOutput}
  */
 export const useChatActions = () => useMemo(() => ({
-      sendMessage: (message) => core.sendMessage({ message })
+      sendMessage: LandbotClient.sendMessage
     }), [])
 
-/**
- * ChatMessageAPI
- * @typedef {Object} ChatMessageAPI
- * @property {String} key - Message identifier
- * @property {String} text - Content of the message
- * @property {String} author - User who wrote the message
- * @property {Date} timestamp - Time when the message was created
- * @property {String} type - Type of the message
- */
+
 /**
  * messagesFilter: Filters the messages to retrieve only the basic messages
  * @param {ChatMessage} message 
@@ -81,16 +68,6 @@ const messagesFilter = (message) => {
     /** Support for basic message types */
     return ['text', 'dialog'].includes(message.type);
   }
-
-/**
- * APIChatMessage
- * @typedef {Object} APIChatMessage
- * @property {String} samurai - For non existing values, it indicates it is a message from Landbot
- * @property {String} title - Title of the message
- * @property {String} text - Content of the message
- * @property {String} type - Type of the message
- * @property {String} key - Message identifier
- */
 
 /**
  * parseMessages: Normalizes a message list received from the API
