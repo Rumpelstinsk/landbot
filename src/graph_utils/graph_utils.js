@@ -59,7 +59,14 @@ export function getLeafNodes(graph) {
  * @returns {Array} Array of Node models.
  */
 export function getRootNodes(graph) {
-  
+    const targetNodesIdentifiers = new Set()
+    Object
+        .values(graph.connections)
+        .forEach(connection => targetNodesIdentifiers.add(connection.targetPath))
+
+    return Object
+        .values(graph.nodes)
+        .filter(node => !targetNodesIdentifiers.has(node.id))
 }
 
 /**
